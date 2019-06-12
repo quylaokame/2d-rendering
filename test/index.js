@@ -16,9 +16,12 @@ window.addEventListener("load", function(){
 
     function init(){
         var textures = loader.atlas.textures;
-        var mycar = new Sprite(renderer, textures.myCar);
+        var mycar = new Sprite(renderer, textures['myCar']);
         renderer.addChild(mycar);
-        renderer.context2d.drawImage(textures.myCar,100,100);
+        mycar.x = 100;
+        mycar.y = 200;
+        mycar.width = 50;
+        mycar.height = 100;
     }
-    
+
 });
