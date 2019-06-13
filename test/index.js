@@ -1,5 +1,4 @@
 import {Renderer} from "../lib/renderer/Renderer.js";
-import {Loader} from "../lib/resource/Loader.js";
 import {Container} from "../lib/display/Container.js";
 import {Sprite} from "../lib/display/Sprite.js";
 
@@ -15,6 +14,9 @@ window.addEventListener("load", function () {
         var layerItem = new Container(renderer);
         renderer.addChild(layerItem);
 
+        layerItem.x = 20;
+        layerItem.y = 20;
+
         var mycar = new Sprite(renderer, "./assets/myCar.png");
         layerItem.addChild(mycar);
         mycar.x = 100;
@@ -23,7 +25,7 @@ window.addEventListener("load", function () {
         mycar.height = 100;
 
         var redCar = new Sprite(renderer, "./assets/redCar.png");
-        layerItem.addChild(redCar);
+        layerItem.addChildAt(redCar,0);
         redCar.x = 100;
         redCar.y = 150;
         redCar.width = 50;
