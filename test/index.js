@@ -1,12 +1,11 @@
 import {Renderer} from "../lib/renderer/Renderer.js";
 import {Container} from "../lib/display/Container.js";
 import {Sprite} from "../lib/display/Sprite.js";
-
+import {Keyboard} from "../lib/input/KeyBoard.js";
 
 window.addEventListener("load", function () {
     var myCanvas = document.getElementById("GameCanvas");
     var renderer = new Renderer(myCanvas);
-
     init();
 
     function init() {
@@ -31,18 +30,36 @@ window.addEventListener("load", function () {
         redCar.width = 50;
         redCar.height = 100;
 
+        let myDuration = 5000;
+
         runMyCar();
         runRedCar();
 
+        function SpeedUp(){
+            myDuration -= 800;
+            console.log('up');
+        }
+
+        function SpeedDown(){
+            myDuration += 800;
+            console.log('down');
+        }
+
         function runMyCar(){
             mycar.y = 400;
-            renderer.tween(mycar, 5000, {y: -100}, runMyCar);
+            renderer.tween(mycar, myDuration, {y: -100}, runMyCar);
         }
 
         function runRedCar(){
             redCar.y = 400;
-            renderer.tween(redCar, 6000, {y: -100}, runRedCar);
+            renderer.tween(redCar, 1.2 * myDuration, {y: -100}, runRedCar);
+            console.log(myDuration);
         }
+
+        let keyBoard = new Keyboard;
+        keyBoard.keydown("ArrowUp", SpeedUp);
+        keyBoard.keydown("ArrowDown", SpeedDown);
+
     }
 
 });
