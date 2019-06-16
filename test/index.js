@@ -36,13 +36,15 @@ window.addEventListener("load", function () {
         runRedCar();
 
         function SpeedUp(){
-            myDuration -= 800;
-            console.log('up');
+            if(myDuration > 1100)
+                myDuration -= 800;
+                console("up");
         }
 
         function SpeedDown(){
-            myDuration += 800;
-            console.log('down');
+            if(myDuration < 6000)
+                myDuration += 500;
+                console.log("down");
         }
 
         function runMyCar(){
@@ -53,7 +55,6 @@ window.addEventListener("load", function () {
         function runRedCar(){
             redCar.y = 400;
             renderer.tween(redCar, 1.2 * myDuration, {y: -100}, runRedCar);
-            console.log(myDuration);
         }
 
         let keyBoard = new Keyboard;
