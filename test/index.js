@@ -1,7 +1,6 @@
 import {Renderer} from "../lib/renderer/Renderer.js";
 import {Container} from "../lib/display/Container.js";
 import {Sprite} from "../lib/display/Sprite.js";
-import {Keyboard} from "../lib/input/KeyBoard.js";
 
 window.addEventListener("load", function () {
     var myCanvas = document.getElementById("GameCanvas");
@@ -13,53 +12,41 @@ window.addEventListener("load", function () {
         var layerItem = new Container();
         renderer.screen.addChild(layerItem);
 
-        layerItem.x = 20;
-        layerItem.y = 20;
+        layerItem.x = 0;
+        layerItem.y = 0;
 
         var mycar = new Sprite("./assets/myCar.png");
         layerItem.addChild(mycar);
-        mycar.x = 200;
-        mycar.y = 400;
+        mycar.x = 350;
+        mycar.y = 300;
         mycar.width = 50;
         mycar.height = 100;
 
-        var redCar = new Sprite("./assets/redCar.png");
-        layerItem.addChildAt(redCar,0);
-        redCar.x = 100;
-        redCar.y = 150;
-        redCar.width = 50;
-        redCar.height = 100;
+        var frames = [
+            {
+                props: {x: 350,y:0},
+                duration: 1000
+            },
+            {
+                props: {x: 0, y:0},
+                duration: 1000
+            },
+            {
+                props: {x: 0, y:300},
+                duration: 1000
+            },
+            {
+                props: {x: 350, y:300},
+                duration: 1000
+            }
+        ]
 
-        let myDuration = 5000;
-
-        runMyCar();
-        runRedCar();
-
-        function SpeedUp(){
-            if(myDuration > 1100)
-                myDuration -= 800;
-                console("up");
+        function loopMove(){
+            renderer.keyFrame(mycar,frames,loopMove);
         }
 
-        function SpeedDown(){
-            if(myDuration < 6000)
-                myDuration += 500;
-                console.log("down");
-        }
+        loopMove();
 
-        function runMyCar(){
-            mycar.y = 400;
-            renderer.tween(mycar, myDuration, {y: -100}, runMyCar);
-        }
-
-        function runRedCar(){
-            redCar.y = 400;
-            renderer.tween(redCar, 1.2 * myDuration, {y: -100}, runRedCar);
-        }
-
-        let keyBoard = new Keyboard;
-        keyBoard.keydown("ArrowUp", SpeedUp);
-        keyBoard.keydown("ArrowDown", SpeedDown);
 
     }
 
