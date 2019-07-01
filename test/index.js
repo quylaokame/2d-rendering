@@ -1,6 +1,7 @@
 import {Renderer} from "../lib/renderer/Renderer.js";
 import {Container} from "../lib/display/Container.js";
 import {Sprite} from "../lib/display/Sprite.js";
+import{Text} from "../lib/display/Text.js";
 
 window.addEventListener("load", function () {
     var myCanvas = document.getElementById("GameCanvas");
@@ -47,6 +48,13 @@ window.addEventListener("load", function () {
 
         loopMove();
 
+        var text = new Text("HELLO",{
+            fill: '#cd0000',
+            fontSize: '40px'
+        });
+        text.x = 150;
+        text.y = 150;
+        layerItem.addChild(text);
 
     }
 
