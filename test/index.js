@@ -1,61 +1,11 @@
-import {Renderer} from "../lib/renderer/Renderer.js";
-import {Container} from "../lib/display/Container.js";
-import {Sprite} from "../lib/display/Sprite.js";
-import{Text} from "../lib/display/Text.js";
+import { Game } from "./Game.js";
 
 window.addEventListener("load", function () {
+
     var myCanvas = document.getElementById("GameCanvas");
-    var renderer = new Renderer(myCanvas);
-    init();
+    window.gameRenderer = new DEMO.Renderer(myCanvas);
+    window.game = new Game();
 
-    function init() {
-
-        var layerItem = new Container();
-        renderer.screen.addChild(layerItem);
-
-        layerItem.x = 0;
-        layerItem.y = 0;
-
-        var mycar = new Sprite("./assets/myCar.png");
-        layerItem.addChild(mycar);
-        mycar.x = 350;
-        mycar.y = 300;
-        mycar.width = 50;
-        mycar.height = 100;
-
-        var frames = [
-            {
-                props: {x: 350,y:0},
-                duration: 1000
-            },
-            {
-                props: {x: 0, y:0},
-                duration: 1000
-            },
-            {
-                props: {x: 0, y:300},
-                duration: 1000
-            },
-            {
-                props: {x: 350, y:300},
-                duration: 1000
-            }
-        ]
-
-        function loopMove(){
-            renderer.keyFrame(mycar,frames,loopMove);
-        }
-
-        loopMove();
-
-        var text = new Text("HELLO",{
-            fill: '#cd0000',
-            fontSize: '40px'
-        });
-        text.x = 150;
-        text.y = 150;
-        layerItem.addChild(text);
-
-    }
+    gameRenderer.screen.addChild(game.gameMovie);
 
 });
