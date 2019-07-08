@@ -1,6 +1,10 @@
+import {RedCar} from "./ui/RedCar.js";
+
 export class GameMovie extends DEMO.Container {
     constructor() {
         super();
+
+        this.duration = 5000;
         this.init();
     }
 
@@ -30,7 +34,16 @@ export class GameMovie extends DEMO.Container {
 
     initBackground() {
         this.bg = new DEMO.Sprite("./assets/background.png");
+        this.bg.y = -400;
         this.layerBackground.addChild(this.bg);
+        this.effectMoveRoad();
+    }
+
+    effectMoveRoad() {
+        gameRenderer.tween(this.bg, 3000, { y: 0 }, function () {
+            this.bg.y = -400;
+            this.effectMoveRoad();
+        }.bind(this));
     }
 
     initItems() {
@@ -44,12 +57,17 @@ export class GameMovie extends DEMO.Container {
             this.mycar.height = 100;
         }
 
-        this.redCar = new DEMO.Sprite("./assets/redCar.png");
-        this.layerItem.addChild(this.redCar);
-        this.redCar.x = 215;
-        this.redCar.y = -100;
-        this.redCar.width = 50;
-        this.redCar.height = 100;
+        if (!this.listRedCar) {
+            this.listRedCar = [];
+
+            for (let i = 0; i < 2; i++) {
+                var redCar = new RedCar();
+                redCar.duration = this.duration;
+                this.layerItem.addChild(redCar);
+                this.listRedCar.push(redCar);
+            }
+
+        }
 
         if (!this.labelScore) {
             this.labelScore = new DEMO.Text("Score", {
@@ -69,17 +87,38 @@ export class GameMovie extends DEMO.Container {
             this.layerItem.addChild(this.txtScore);
             this.txtScore.x = 345;
             this.txtScore.y = 200;
-        }
-        
+        }  
 
-        this.moveRedCar();
+        this.startGame();
     }
 
-    moveRedCar() {
-        gameRenderer.tween(this.redCar, 6000, { y: 400 }, function () {
-            this.redCar.y = -100;
-            this.moveRedCar();
-        }.bind(this))
+    moveRight(){
+        if(this.mycar.x < 250)
+            this.mycar.x++;
+    }
+
+    moveLeft(){
+        if(this.mycar.x > 110)
+            this.mycar.x--;
+    }
+
+    startGame(){
+        let delayTime = this.duration*1.5;
+        this.listRedCar[0].run();
+        setTimeout(()=>{this.listRedCar[1].run()}, delayTime);
+    }
+
+    detectCollision(){
+        for( let i = 0; i < 2; i++){
+            let redCar = this.listRedCar[i];
+            if( Math.abs(this.mycar.x - redCar.x) <= 50 && Math.abs(this.mycar.y - redCar.y) <=100){
+                this.isExplosive = true;
+            }
+        }
+    }
+
+    endGame(){
+
     }
 
     initEffect() {
