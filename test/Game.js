@@ -9,7 +9,7 @@ export class Game {
         //view
         this.gameMovie = new GameMovie();
         //controller
-        this.controller = new Controller();
+        this.controller = new Controller(this);
         this.init();
     }
 
