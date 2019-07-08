@@ -11,7 +11,7 @@ export class RedCar extends DEMO.Sprite {
 
     run(onUpdate) {
         gameRenderer.tween(this, this.duration, { y: 400}, () => {
-            this.reset();
+            this.reset(onUpdate);
             this.run();
         }, onUpdate);
     }
