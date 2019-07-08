@@ -1,4 +1,4 @@
-import {RedCar} from "./ui/RedCar.js";
+import { RedCar } from "./ui/RedCar.js";
 
 export class GameMovie extends DEMO.Container {
     constructor() {
@@ -87,38 +87,43 @@ export class GameMovie extends DEMO.Container {
             this.layerItem.addChild(this.txtScore);
             this.txtScore.x = 345;
             this.txtScore.y = 200;
-        }  
+        }
 
         this.startGame();
     }
 
-    moveRight(){
-        if(this.mycar.x < 250)
-            this.mycar.x++;
+    moveRight() {
+        if (this.mycar.x < 250)
+            this.mycar.x += 3;
     }
 
-    moveLeft(){
-        if(this.mycar.x > 110)
-            this.mycar.x--;
+    moveLeft() {
+        if (this.mycar.x > 110)
+            this.mycar.x -= 5;
     }
 
-    startGame(){
-        let delayTime = this.duration*1.5;
-        this.listRedCar[0].run();
-        setTimeout(()=>{this.listRedCar[1].run()}, delayTime);
+    startGame() {
+        let delayTime = this.duration * 1.5;
+        this.listRedCar[0].run(() => { this.detectCollision() });
+        this.startSecond = setTimeout(() => { this.listRedCar[1].run(this.detectCollision.bind(this)) }, delayTime);
     }
 
-    detectCollision(){
-        for( let i = 0; i < 2; i++){
+    detectCollision() {
+        for (let i = 0; i < 2; i++) {
             let redCar = this.listRedCar[i];
-            if( Math.abs(this.mycar.x - redCar.x) <= 50 && Math.abs(this.mycar.y - redCar.y) <=100){
+            if (Math.abs(this.mycar.x - redCar.x) <= 50 && Math.abs(this.mycar.y - redCar.y) <= 100) {
                 this.isExplosive = true;
+                this.endGame();
             }
         }
     }
 
-    endGame(){
-
+    endGame() {
+        gameRenderer.killTweenOf(this.bg);
+        for (let i = 0; i < this.listRedCar.length; i++) {
+            this.listRedCar[i].stop();
+        }
+        clearTimeout(this.startSecond);
     }
 
     initEffect() {
