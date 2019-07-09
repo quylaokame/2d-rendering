@@ -1,9 +1,10 @@
-import {RedCar} from "./ui/RedCar.js";
+import { RedCar } from "./ui/RedCar.js";
 
 export class GameMovie extends DEMO.Container {
     constructor() {
         super();
-
+        this.widthCar = 50;
+        this.heightCar = 100;
         this.duration = 5000;
         this.init();
     }
@@ -36,14 +37,6 @@ export class GameMovie extends DEMO.Container {
         this.bg = new DEMO.Sprite("./assets/background.png");
         this.bg.y = -400;
         this.layerBackground.addChild(this.bg);
-        this.effectMoveRoad();
-    }
-
-    effectMoveRoad() {
-        gameRenderer.tween(this.bg, 3000, {y: 0}, () => {
-            this.bg.y = -400;
-            this.effectMoveRoad();
-        });
     }
 
     initItems() {
@@ -53,8 +46,8 @@ export class GameMovie extends DEMO.Container {
             this.layerItem.addChild(this.mycar);
             this.mycar.x = 135;
             this.mycar.y = 280;
-            this.mycar.width = 50;
-            this.mycar.height = 100;
+            this.mycar.width = this.widthCar;
+            this.mycar.height = this.heightCar;
         }
 
         if (!this.listRedCar) {
@@ -62,6 +55,8 @@ export class GameMovie extends DEMO.Container {
 
             for (let i = 0; i < 2; i++) {
                 var redCar = new RedCar();
+                redCar.width = this.widthCar;
+                redCar.height = this.heightCar;
                 redCar.duration = this.duration;
                 this.layerItem.addChild(redCar);
                 this.listRedCar.push(redCar);
@@ -80,7 +75,7 @@ export class GameMovie extends DEMO.Container {
         }
 
         if (!this.txtScore) {
-            this.txtScore = new DEMO.Text("0", {
+            this.txtScore = new DEMO.Text(this.score, {
                 fill: '#cd0000',
                 fontSize: '20px'
             });
@@ -89,7 +84,21 @@ export class GameMovie extends DEMO.Container {
             this.txtScore.y = 200;
         }
 
-        this.startGame();
+    }
+
+    initEffect() {
+        this.spriteBoom = new DEMO.Sprite("./assets/boom.png");
+        this.layerEffect.addChild(this.spriteBoom);
+        this.spriteBoom.width = 100;
+        this.spriteBoom.height = 100;
+        this.spriteBoom.visible = false;
+    }
+
+    effectMoveRoad() {
+        gameRenderer.tween(this.bg, 3000, { y: 0 }, () => {
+            this.bg.y = -400;
+            this.effectMoveRoad();
+        });
     }
 
     moveRight() {
@@ -104,6 +113,9 @@ export class GameMovie extends DEMO.Container {
 
     startGame() {
         this.isPlaying = true;
+        this.resetGame();
+        this.effectMoveRoad();
+
         let delayTime = this.duration * 0.5;
         this.listRedCar[0].run(() => {
             this.detectCollision()
@@ -116,29 +128,35 @@ export class GameMovie extends DEMO.Container {
     detectCollision() {
         for (let i = 0; i < 2; i++) {
             let redCar = this.listRedCar[i];
-            if (Math.abs(this.mycar.x - redCar.x) <= 50 && Math.abs(this.mycar.y - redCar.y) <= 100) {
+            if (Math.abs(this.mycar.x - redCar.x) <= 46 && Math.abs(this.mycar.y - redCar.y) <= 94) {
+                this.spriteBoom.x = (this.mycar.x + redCar.x + this.widthCar) / 2 - this.spriteBoom.width / 2;
+                this.spriteBoom.y = (this.mycar.y + redCar.y + this.heightCar) / 2 - this.spriteBoom.height / 2;
                 this.endGame();
             }
         }
     }
 
     endGame() {
-        this.spriteBoom.visible = true;
-        this.spriteBoom.x = this.mycar.x + 25 - this.spriteBoom.width / 2;
-        this.spriteBoom.y = this.mycar.y - this.spriteBoom.height / 2;
         this.isPlaying = false;
+        // stop effect Background
         gameRenderer.killTweenOf(this.bg);
+        // stop the red cars
         for (let i = 0; i < this.listRedCar.length; i++) {
             this.listRedCar[i].stop();
         }
         clearTimeout(this.startSecond);
+        // show BOOM
+        this.spriteBoom.visible = true;
     }
 
-    initEffect() {
-        this.spriteBoom = new DEMO.Sprite("./assets/boom.png");
-        this.layerEffect.addChild(this.spriteBoom);
-        this.spriteBoom.width = 100;
-        this.spriteBoom.height = 100;
+    resetGame() {
+        this.mycar.x = 135;
+        this.mycar.y = 280;
+        this.bg.y = - 400;
         this.spriteBoom.visible = false;
+        this.listRedCar.forEach((car) => {
+            car.x = 215;
+            car.y = -100;
+        })
     }
 }
