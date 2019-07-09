@@ -1,4 +1,4 @@
-import { RedCar } from "./ui/RedCar.js";
+import {RedCar} from "./ui/RedCar.js";
 
 export class GameMovie extends DEMO.Container {
     constructor() {
@@ -40,10 +40,10 @@ export class GameMovie extends DEMO.Container {
     }
 
     effectMoveRoad() {
-        gameRenderer.tween(this.bg, 3000, { y: 0 }, function () {
+        gameRenderer.tween(this.bg, 3000, {y: 0}, () => {
             this.bg.y = -400;
             this.effectMoveRoad();
-        }.bind(this));
+        });
     }
 
     initItems() {
@@ -93,32 +93,40 @@ export class GameMovie extends DEMO.Container {
     }
 
     moveRight() {
-        if (this.mycar.x < 250)
+        if (this.mycar.x < 250 && this.isPlaying)
             this.mycar.x += 3;
     }
 
     moveLeft() {
-        if (this.mycar.x > 110)
+        if (this.mycar.x > 110 && this.isPlaying)
             this.mycar.x -= 5;
     }
 
     startGame() {
-        let delayTime = this.duration * 1.5;
-        this.listRedCar[0].run(() => { this.detectCollision() });
-        this.startSecond = setTimeout(() => { this.listRedCar[1].run(this.detectCollision.bind(this)) }, delayTime);
+        this.isPlaying = true;
+        let delayTime = this.duration * 0.5;
+        this.listRedCar[0].run(() => {
+            this.detectCollision()
+        });
+        this.startSecond = setTimeout(() => {
+            this.listRedCar[1].run(this.detectCollision.bind(this))
+        }, delayTime);
     }
 
     detectCollision() {
         for (let i = 0; i < 2; i++) {
             let redCar = this.listRedCar[i];
             if (Math.abs(this.mycar.x - redCar.x) <= 50 && Math.abs(this.mycar.y - redCar.y) <= 100) {
-                this.isExplosive = true;
                 this.endGame();
             }
         }
     }
 
     endGame() {
+        this.spriteBoom.visible = true;
+        this.spriteBoom.x = this.mycar.x + 25 - this.spriteBoom.width / 2;
+        this.spriteBoom.y = this.mycar.y - this.spriteBoom.height / 2;
+        this.isPlaying = false;
         gameRenderer.killTweenOf(this.bg);
         for (let i = 0; i < this.listRedCar.length; i++) {
             this.listRedCar[i].stop();
@@ -127,6 +135,10 @@ export class GameMovie extends DEMO.Container {
     }
 
     initEffect() {
-
+        this.spriteBoom = new DEMO.Sprite("./assets/boom.png");
+        this.layerEffect.addChild(this.spriteBoom);
+        this.spriteBoom.width = 100;
+        this.spriteBoom.height = 100;
+        this.spriteBoom.visible = false;
     }
 }
