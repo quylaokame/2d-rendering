@@ -7,7 +7,8 @@ export class Controller{
 
     initEvents(){
         this.input.keydown('ArrowLeft', () => {this.gameMovie.moveLeft();});
-        this.input.keydown('ArrowRight', () => {this.gameMovie.moveRight();})
+        this.input.keydown('ArrowRight', () => {this.gameMovie.moveRight();});
+        this.input.keydown('Space', () => {this.gameMovie.startGame();});
     }
 
 }
