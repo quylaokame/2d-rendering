@@ -1,4 +1,4 @@
-import { RedCar } from "./ui/RedCar.js";
+import {RedCar} from "./ui/RedCar.js";
 
 export class GameMovie extends DEMO.Container {
     constructor() {
@@ -75,7 +75,7 @@ export class GameMovie extends DEMO.Container {
         }
 
         if (!this.txtScore) {
-            this.txtScore = new DEMO.Text(this.score, {
+            this.txtScore = new DEMO.Text('0', {
                 fill: '#cd0000',
                 fontSize: '20px'
             });
@@ -95,7 +95,7 @@ export class GameMovie extends DEMO.Container {
     }
 
     effectMoveRoad() {
-        gameRenderer.tween(this.bg, 3000, { y: 0 }, () => {
+        gameRenderer.tween(this.bg, 3000, {y: 0}, () => {
             this.bg.y = -400;
             this.effectMoveRoad();
         });
@@ -103,12 +103,12 @@ export class GameMovie extends DEMO.Container {
 
     moveRight() {
         if (this.mycar.x < 250 && this.isPlaying)
-            this.mycar.x += 3;
+            this.mycar.x += 6;
     }
 
     moveLeft() {
         if (this.mycar.x > 110 && this.isPlaying)
-            this.mycar.x -= 5;
+            this.mycar.x -= 6;
     }
 
     startGame() {
@@ -150,9 +150,11 @@ export class GameMovie extends DEMO.Container {
     }
 
     resetGame() {
+        game.score = 0;
+        this.txtScore.text = '0';
         this.mycar.x = 135;
         this.mycar.y = 280;
-        this.bg.y = - 400;
+        this.bg.y = -400;
         this.spriteBoom.visible = false;
         this.listRedCar.forEach((car) => {
             car.x = 215;

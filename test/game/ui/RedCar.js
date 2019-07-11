@@ -10,22 +10,24 @@ export class RedCar extends DEMO.Sprite {
     }
 
     run(onUpdate) {
-        gameRenderer.tween(this, this.duration, { y: 400}, () => {
+        gameRenderer.tween(this, this.duration, {y: 400}, () => {
+            let newScore = game.score + 10;
+            game.updateScore(newScore);
             this.reset();
             this.run(onUpdate);
         }, onUpdate);
     }
 
-    stop(){
+    stop() {
         gameRenderer.killTweenOf(this);
     }
 
-    reset(){
+    reset() {
         this.randomPositionX();
         this.y = -100;
     }
 
-    randomPositionX(){
+    randomPositionX() {
         let index = Math.round(Math.random());
         this.x = this.listPosX[index];
     }
